@@ -14,19 +14,19 @@
     </div>
 
     <script>
-      const plusButton = document.querySelector('#plus');
-      const minusButton = document.querySelector('#minus');
-      const valueDisplay = document.querySelector('#value');
+      const plusButton = document.querySelector('#plus')
+      const minusButton = document.querySelector('#minus')
+      const valueDisplay = document.querySelector('#value')
 
       function updateValue(val) {
-        valueDisplay.textContent = `${val}`;
+        valueDisplay.textContent = `${val}`
 
         if (+val > 0) {
-          valueDisplay.style.color = 'green';
+          valueDisplay.style.color = 'green'
         } else if (+val < 0) {
-          valueDisplay.style.color = 'red';
+          valueDisplay.style.color = 'red'
         } else {
-          valueDisplay.style.color = 'black';
+          valueDisplay.style.color = 'black'
         }
       }
     </script>
@@ -56,56 +56,53 @@
         #_minusBtn = null;
 
         constructor(valueEl, plusBtn, minusBtn) {
-          this._value = 0;
-          this._valueDisplay = valueEl;
-          this._plusBtn = plusBtn;
-          this._minusBtn = minusBtn;
+          this.#_value = 0;
+          this.#_valueDisplay = valueEl;
+          this.#_plusBtn = plusBtn;
+          this.#_minusBtn = minusBtn;
 
-          this._plusBtn.onclick = () => this.plusOne();
-          this._minusBtn.onclick = () => this.minusOne();
+          this.#_plusBtn.onclick = () => this.plusOne();
+          this.#_minusBtn.onclick = () => this.minusOne();
         }
 
-        changeColor() {
-          if (+this._value > 0) {
-            this._valueDisplay.style.color = 'green';
-          } else if (+this._value < 0) {
-            this._valueDisplay.style.color = 'red';
+        #changeColor() {
+          if (+this.#_value > 0) {
+            this.#_valueDisplay.style.color = 'green';
+          } else if (+this.#_value < 0) {
+            this.#_valueDisplay.style.color = 'red';
           } else {
-            this._valueDisplay.style.color = 'black';
+            this.#_valueDisplay.style.color = 'black';
           }
         }
 
         plusOne() {
-          this._value += 1;
-          this._valueDisplay.textContent = this._value;
-          this.changeColor();
+          this.#_value += 1;
+          this.#_valueDisplay.textContent = this.#_value;
+          this.#changeColor();
         }
 
         minusOne() {
-          this._value -= 1;
-          this._valueDisplay.textContent = this._value;
-          this.changeColor();
+          this.#_value -= 1;
+          this.#_valueDisplay.textContent = this.#_value;
+          this.#changeColor();
         }
       }
 
       const counter = new Counter(valueDisplay, plusButton, minusButton);
-
-      // plusButton.addEventListener('click', () => counter.plusOne());
-      // minusButton.addEventListener('click', () => counter.minusOne());
     </script> -->
 
     <!-- <script>
       // RxJS
-      const { fromEvent, merge, map, scan } = rxjs;
+      const { fromEvent, merge, map, scan } = rxjs
 
-      const plus$ = fromEvent(plusButton, 'click').pipe(map(() => 1));
-      const minus$ = fromEvent(minusButton, 'click').pipe(map(() => -1));
+      const plus$ = fromEvent(plusButton, 'click').pipe(map(() => 1))
+      const minus$ = fromEvent(minusButton, 'click').pipe(map(() => -1))
 
       const merged$ = merge(plus$, minus$).pipe(
         scan((acc, cur) => acc + cur, 0)
-      );
+      )
 
-      merged$.subscribe(updateValue);
+      merged$.subscribe(updateValue)
     </script> -->
   </body>
 </html>
