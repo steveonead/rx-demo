@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <input id="input" type="text" />
+      <div>
+        <pre>建議搜尋</pre>
+        <svg
+          id="loading"
+          width="24"
+          height="24"
+          style="display: none"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <style>
+            .spinner_ajPY {
+              transform-origin: center;
+              animation: spinner_AtaB 0.75s infinite linear;
+            }
+            @keyframes spinner_AtaB {
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          </style>
+          <path
+            d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+            opacity=".25"
+          />
+          <path
+            d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+            class="spinner_ajPY"
+          />
+        </svg>
+        <ul id="list"></ul>
+      </div>
+    </div>
+
+    <script>
+      const inputEl = document.querySelector('#input')
+      const loadingEl = document.querySelector('#loading')
+      const listEl = document.querySelector('#list')
+
+      function createURL(keyword) {
+        if (!keyword) return ''
+
+        return `https://zh.wikipedia.org/w/api.php?action=opensearch&format=json&limit=5&origin=*&search=${keyword}`
+      }
+
+      function setLoadingVisible(isShow) {
+        loadingEl.style.display = isShow ? 'block' : 'none'
+      }
+
+      async function queryFromWiki(url) {
+        if (!url) {
+          return []
+        }
+
+        const data = await fetch(url, { method: 'GET', mode: 'cors' }).then((res) => res.json())
+
+        return data[1]
+      }
+
+      function clearList() {
+        listEl.innerHTML = ''
+      }
+
+      function renderList(dataArr) {
+        if (!dataArr) {
+          return
+        }
+
+        dataArr.forEach((data) => {
+          const li = document.createElement('li')
+          li.textContent = data
+
+          listEl.appendChild(li)
+        })
+      }
+
+      function myDebounce(fn, delay) {
+        let timer
+        return function (...args) {
+          clearTimeout(timer)
+          timer = setTimeout(() => fn.apply(this, args), delay)
+        }
+      }
+
+      const debounceQuery = myDebounce((e) => {
+        const url = createURL(e.target.value.trim())
+        setLoadingVisible(Boolean(url))
+        clearList()
+
+        queryFromWiki(url).then((data) => {
+          setLoadingVisible(data.length < 0)
+          renderList(data)
+        })
+      }, 500)
+
+      inputEl.addEventListener('input', debounceQuery)
+    </script>
+  </body>
+</html>

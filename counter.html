@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://unpkg.com/rxjs@^7/dist/bundles/rxjs.umd.min.js"></script>
+  </head>
+  <body>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <button id="plus" type="button">+</button>
+      <pre id="value">0</pre>
+      <button id="minus" type="button">-</button>
+    </div>
+
+    <script>
+      const plusButton = document.querySelector('#plus');
+      const minusButton = document.querySelector('#minus');
+      const valueDisplay = document.querySelector('#value');
+
+      function updateValue(val) {
+        valueDisplay.textContent = `${val}`;
+
+        if (+val > 0) {
+          valueDisplay.style.color = 'green';
+        } else if (+val < 0) {
+          valueDisplay.style.color = 'red';
+        } else {
+          valueDisplay.style.color = 'black';
+        }
+      }
+    </script>
+
+    <script>
+      // 傳統寫法
+      let value = 0;
+
+      plusButton.addEventListener('click', () => {
+        value += 1;
+
+        updateValue(value);
+      });
+      minusButton.addEventListener('click', () => {
+        value -= 1;
+
+        updateValue(value);
+      });
+    </script>
+
+    <!-- <script>
+      // OOP-like
+      class Counter {
+        #_value = 0;
+        #_valueDisplay = null;
+        #_plusBtn = null;
+        #_minusBtn = null;
+
+        constructor(valueEl, plusBtn, minusBtn) {
+          this._value = 0;
+          this._valueDisplay = valueEl;
+          this._plusBtn = plusBtn;
+          this._minusBtn = minusBtn;
+
+          this._plusBtn.onclick = () => this.plusOne();
+          this._minusBtn.onclick = () => this.minusOne();
+        }
+
+        changeColor() {
+          if (+this._value > 0) {
+            this._valueDisplay.style.color = 'green';
+          } else if (+this._value < 0) {
+            this._valueDisplay.style.color = 'red';
+          } else {
+            this._valueDisplay.style.color = 'black';
+          }
+        }
+
+        plusOne() {
+          this._value += 1;
+          this._valueDisplay.textContent = this._value;
+          this.changeColor();
+        }
+
+        minusOne() {
+          this._value -= 1;
+          this._valueDisplay.textContent = this._value;
+          this.changeColor();
+        }
+      }
+
+      const counter = new Counter(valueDisplay, plusButton, minusButton);
+
+      // plusButton.addEventListener('click', () => counter.plusOne());
+      // minusButton.addEventListener('click', () => counter.minusOne());
+    </script> -->
+
+    <!-- <script>
+      // RxJS
+      const { fromEvent, merge, map, scan } = rxjs;
+
+      const plus$ = fromEvent(plusButton, 'click').pipe(map(() => 1));
+      const minus$ = fromEvent(minusButton, 'click').pipe(map(() => -1));
+
+      const merged$ = merge(plus$, minus$).pipe(
+        scan((acc, cur) => acc + cur, 0)
+      );
+
+      merged$.subscribe(updateValue);
+    </script> -->
+  </body>
+</html>
